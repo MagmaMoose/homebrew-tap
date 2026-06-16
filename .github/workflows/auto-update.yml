@@ -45,8 +45,16 @@ jobs:
 
       - name: Check for formula updates
         id: check-updates
+        env:
+          # Authenticate livecheck's :github_latest API calls; unauthenticated runners
+          # get rate-limited, which previously looked (silently) like "up to date".
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
+          # Homebrew 6.x refuses to run formulae from untrusted third-party taps when
+          # HOMEBREW_REQUIRE_TAP_TRUST is set (it is, on runners) — and `brew livecheck`
+          # executes each formula's livecheck block. Trust our own tap so it can.
+          brew trust --tap magmamoose/tap
           updated_formulas=""
 
           for formula in Formula/*.rb; do
@@ -61,10 +69,13 @@ jobs:
 
               echo "Checking for updates to $formula_name..."
 
-              # Attempt to update using brew livecheck (JSON) and bump-formula-pr
-              json_output=$(
-                brew livecheck --json --formula "$formula_name" 2>/dev/null || echo "[]"
-              )
+              # Attempt to update using brew livecheck (JSON) and bump-formula-pr.
+              # Surface failures as a warning instead of silently treating them as
+              # "up to date" (the old `2>/dev/null || echo []` masked real errors).
+              if ! json_output=$(brew livecheck --json --formula "$formula_name" 2>/tmp/livecheck.err); then
+                echo "::warning::livecheck failed for $formula_name: $(tr '\n' ' ' </tmp/livecheck.err)"
+                json_output="[]"
+              fi
               is_outdated=$(
                 JSON="$json_output" python3 - <<'PY'
           import os, sys, json
