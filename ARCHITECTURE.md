@@ -1,6 +1,6 @@
 # Repository Architecture
 
-This document describes the architecture and structure of the CalebSargeant/homebrew-tap repository.
+This document describes the architecture and structure of the MagmaMoose/homebrew-tap repository.
 
 ## Overview
 

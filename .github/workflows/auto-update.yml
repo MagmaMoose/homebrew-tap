@@ -4,8 +4,10 @@ name: Auto Update Formulas
 
 'on':
   schedule:
-    # Run daily at 02:00 UTC
-    - cron: '0 2 * * *'
+    # Weekly safety-net (Mondays 02:00 UTC). The primary path is event-driven:
+    # each upstream repo bumps its own formula on release (e.g. chargate's
+    # bump-homebrew job). This only catches anything a release hook missed.
+    - cron: '0 2 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -20,7 +22,7 @@ jobs:
     steps:
       - name: Checkout repository
         # yamllint disable-next-line rule:line-length
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -37,9 +39,9 @@ jobs:
       - name: Tap repository
         run: |
           brew_repo="$(brew --repository)"
-          mkdir -p "$brew_repo/Library/Taps/calebsargeant"
+          mkdir -p "$brew_repo/Library/Taps/magmamoose"
           ln -s "$GITHUB_WORKSPACE" \
-            "$brew_repo/Library/Taps/calebsargeant/homebrew-tap"
+            "$brew_repo/Library/Taps/magmamoose/homebrew-tap"
 
       - name: Check for formula updates
         id: check-updates
@@ -74,20 +76,20 @@ jobs:
               data = [data]
 
           def outdated(item):
-              s = (
-                  item.get('status')
-                  or item.get('livecheck', {}).get('status')
-                  or ''
-              ).lower()
-              if s == 'outdated':
+              # `brew livecheck --json` nests results under "version":
+              #   {"formula": "...", "version": {"current","latest","outdated"}}
+              v = item.get('version')
+              if isinstance(v, dict):
+                  if v.get('outdated') is True:
+                      return True
+                  cur, latest = v.get('current'), v.get('latest')
+                  return bool(cur and latest and str(cur) != str(latest))
+              # Fallbacks for older / flat shapes.
+              if str(item.get('status') or '').lower() == 'outdated':
                   return True
-              cur = item.get('version') or item.get('current')
-              latest = (
-                  item.get('latest')
-                  or item.get('newer_version')
-                  or item.get('latest_version')
-              )
-              return (cur and latest and str(cur) != str(latest))
+              cur = v if isinstance(v, str) else item.get('current')
+              latest = item.get('latest') or item.get('newer_version')
+              return bool(cur and latest and str(cur) != str(latest))
 
           print('true' if any(outdated(it) for it in data) else 'false')
           PY

@@ -19,7 +19,7 @@ This project follows the [Homebrew Code of Conduct](https://github.com/Homebrew/
 
 ### Reporting Issues
 
-- Check if the issue already exists in the [issue tracker](https://github.com/CalebSargeant/homebrew-tap/issues)
+- Check if the issue already exists in the [issue tracker](https://github.com/MagmaMoose/homebrew-tap/issues)
 - Use a clear and descriptive title
 - Include as much relevant information as possible
 - Include steps to reproduce the issue
@@ -206,7 +206,7 @@ If you need help:
 
 - Check the [Homebrew documentation](https://docs.brew.sh/)
 - Review the [Formula Cookbook](https://docs.brew.sh/Formula-Cookbook)
-- Ask questions in [GitHub Discussions](https://github.com/CalebSargeant/homebrew-tap/discussions)
+- Ask questions in [GitHub Discussions](https://github.com/MagmaMoose/homebrew-tap/discussions)
 - Open an issue for bugs or problems
 
 ## Additional Resources

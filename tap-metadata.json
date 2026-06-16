@@ -1,18 +1,18 @@
 {
-  "tap": "CalebSargeant/tap",
-  "formula_namespace": "CalebSargeant",
+  "tap": "MagmaMoose/tap",
+  "formula_namespace": "MagmaMoose",
   "maintainers": [
     {
       "name": "Caleb Sargeant",
       "github": "CalebSargeant"
     }
   ],
-  "homepage": "https://github.com/CalebSargeant/homebrew-tap",
+  "homepage": "https://github.com/MagmaMoose/homebrew-tap",
   "description": "Centralised Homebrew tap for various CLI tools with automated updates",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CalebSargeant/homebrew-tap.git"
+    "url": "https://github.com/MagmaMoose/homebrew-tap.git"
   },
   "formulas": {
     "example-tool": {
@@ -20,6 +20,12 @@
       "homepage": "https://github.com/CalebSargeant/example-tool",
       "version": "1.0.0",
       "status": "template"
+    },
+    "chargate": {
+      "description": "Net-new security and lint gate with a global git-hooks installer",
+      "homepage": "https://github.com/MagmaMoose/chargate",
+      "version": "2.0.0",
+      "status": "active"
     }
   },
   "auto_update": {
