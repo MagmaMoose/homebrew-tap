@@ -1,8 +1,11 @@
 class Transcribe < Formula
-  desc "Video/audio transcription with auto-watch, OpenAI summarization, and Slack notifications"
+  desc "Video/audio transcription with auto-watch, OpenAI summaries, Slack alerts"
   homepage "https://github.com/calebsargeant/transcribe"
   version "1.0.8"
   license "MIT"
+
+  depends_on "ffmpeg"
+  depends_on "whisper-cpp"
 
   on_macos do
     if Hardware::CPU.arm?
@@ -23,9 +26,6 @@ class Transcribe < Formula
       sha256 "0471dceda770cac2bfb6fada084023eca85f3fdff96c38a7ff11481d8db4130a"
     end
   end
-
-  depends_on "whisper-cpp"
-  depends_on "ffmpeg"
 
   def install
     bin.install Dir["transcribe-*"].first => "transcribe"
