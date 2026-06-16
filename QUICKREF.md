@@ -8,7 +8,7 @@ Quick reference for common tasks in the homebrew-tap repository.
 
 ```bash
 # Tap this repository
-brew tap CalebSargeant/tap
+brew tap MagmaMoose/tap
 
 # Install a tool
 brew install tool-name
@@ -34,7 +34,7 @@ brew upgrade
 brew uninstall tool-name
 
 # Untap the repository
-brew untap CalebSargeant/tap
+brew untap MagmaMoose/tap
 ```
 
 ## For Contributors
@@ -277,7 +277,7 @@ brew unpin tool-name
 brew tap
 
 # Get tap info
-brew tap-info CalebSargeant/tap
+brew tap-info MagmaMoose/tap
 ```
 
 ## Troubleshooting

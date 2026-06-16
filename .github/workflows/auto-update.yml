@@ -37,9 +37,9 @@ jobs:
       - name: Tap repository
         run: |
           brew_repo="$(brew --repository)"
-          mkdir -p "$brew_repo/Library/Taps/calebsargeant"
+          mkdir -p "$brew_repo/Library/Taps/magmamoose"
           ln -s "$GITHUB_WORKSPACE" \
-            "$brew_repo/Library/Taps/calebsargeant/homebrew-tap"
+            "$brew_repo/Library/Taps/magmamoose/homebrew-tap"
 
       - name: Check for formula updates
         id: check-updates
