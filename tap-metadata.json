@@ -20,6 +20,12 @@
       "homepage": "https://github.com/CalebSargeant/example-tool",
       "version": "1.0.0",
       "status": "template"
+    },
+    "chargate": {
+      "description": "Net-new security and lint gate with a global git-hooks installer",
+      "homepage": "https://github.com/MagmaMoose/chargate",
+      "version": "2.0.0",
+      "status": "active"
     }
   },
   "auto_update": {
