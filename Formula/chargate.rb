@@ -22,7 +22,10 @@ class Chargate < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/chargate version")
+    # chargate's embedded __version__ can lag the git tag for ci-only releases cut
+    # via version-override (which tags without bumping the version files), so assert
+    # it prints *a* semver rather than the exact tag, and that the CLI is wired up.
+    assert_match(/\A\d+\.\d+\.\d+\Z/, shell_output("#{bin}/chargate version").strip)
     assert_match "install-hooks", shell_output("#{bin}/chargate install-hooks --help")
   end
 end
