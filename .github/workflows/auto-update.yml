@@ -4,8 +4,10 @@ name: Auto Update Formulas
 
 'on':
   schedule:
-    # Run daily at 02:00 UTC
-    - cron: '0 2 * * *'
+    # Weekly safety-net (Mondays 02:00 UTC). The primary path is event-driven:
+    # each upstream repo bumps its own formula on release (e.g. chargate's
+    # bump-homebrew job). This only catches anything a release hook missed.
+    - cron: '0 2 * * 1'
   workflow_dispatch:
 
 permissions:
