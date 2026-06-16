@@ -26,9 +26,9 @@ jobs:
       - name: Tap repository
         run: |
           brew_repo="$(brew --repository)"
-          mkdir -p "$brew_repo/Library/Taps/calebsargeant"
+          mkdir -p "$brew_repo/Library/Taps/magmamoose"
           ln -s "$GITHUB_WORKSPACE" \
-            "$brew_repo/Library/Taps/calebsargeant/homebrew-tap"
+            "$brew_repo/Library/Taps/magmamoose/homebrew-tap"
 
       - name: Audit formulas
         run: |
@@ -43,7 +43,7 @@ jobs:
             fi
 
             echo "::group::Auditing $formula_name"
-            brew audit --strict --online "calebsargeant/tap/$formula_name" || exit 1
+            brew audit --strict --online "magmamoose/tap/$formula_name" || exit 1
             echo "::endgroup::"
           done
 
@@ -107,9 +107,9 @@ jobs:
       - name: Tap repository
         run: |
           brew_repo="$(brew --repository)"
-          mkdir -p "$brew_repo/Library/Taps/calebsargeant"
+          mkdir -p "$brew_repo/Library/Taps/magmamoose"
           ln -s "$GITHUB_WORKSPACE" \
-            "$brew_repo/Library/Taps/calebsargeant/homebrew-tap"
+            "$brew_repo/Library/Taps/magmamoose/homebrew-tap"
 
       - name: Install and test formulas
         run: |
@@ -127,19 +127,19 @@ jobs:
               echo "Testing $formula_name..."
 
               # Install formula from this tap explicitly as a formula (not cask)
-              brew install --build-from-source "calebsargeant/tap/$formula_name" || {
+              brew install --build-from-source "magmamoose/tap/$formula_name" || {
                 echo "Failed to install $formula_name"
                 exit 1
               }
 
               # Run formula tests
-              brew test "calebsargeant/tap/$formula_name" || {
+              brew test "magmamoose/tap/$formula_name" || {
                 echo "Tests failed for $formula_name"
                 exit 1
               }
 
               # Uninstall to clean up
-              brew uninstall --force "calebsargeant/tap/$formula_name"
+              brew uninstall --force "magmamoose/tap/$formula_name"
             fi
           done
 
