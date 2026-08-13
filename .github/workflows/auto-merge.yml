@@ -1,0 +1,63 @@
+# yamllint disable rule:line-length
+---
+name: Auto-merge
+
+# Turns on GitHub's native auto-merge for the routine, machine-generated PRs that
+# previously needed a manual click: formula version bumps (`bump-*`, pushed here by
+# each upstream repo's release job), the scheduled auto-update / checksum PRs, and
+# Dependabot's action bumps.
+#
+# This does NOT bypass any gate. GitHub still holds the PR until every required
+# check on the default branch is green (`chargate`, `diatreme`, CodeQL, code
+# quality) and every review thread is resolved — it only removes the click. A bad
+# sha256 or a formula that fails `brew audit` still never reaches main.
+#
+# Deliberately uses `pull_request` (not `pull_request_target`) and never checks out
+# the PR's code — it only calls the API — so head-branch content is never executed.
+# Dependabot-triggered runs get a read-only token by default; the `permissions`
+# block below is what elevates it enough to enable auto-merge. The same-repo guard
+# keeps forks out entirely, so an outside PR cannot self-merge by naming its branch
+# `bump-something`.
+
+'on':
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Enable auto-merge
+    runs-on: ubuntu-latest
+    if: >-
+      !github.event.pull_request.draft &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        github.event.pull_request.user.login == 'dependabot[bot]' ||
+        startsWith(github.event.pull_request.head.ref, 'bump-') ||
+        github.event.pull_request.head.ref == 'auto-update-formulas' ||
+        github.event.pull_request.head.ref == 'update-checksums'
+      )
+
+    steps:
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        # Merge commit to match the repo's existing history. Re-running on
+        # `synchronize` is a no-op once auto-merge is already on, so treat an
+        # "already enabled" failure as success rather than reporting a red job.
+        run: |
+          if gh pr merge --auto --merge "$PR_URL"; then
+            echo "Auto-merge enabled for $PR_URL"
+          else
+            if gh pr view "$PR_URL" --json autoMergeRequest \
+                 --jq '.autoMergeRequest != null' | grep -q true; then
+              echo "Auto-merge already enabled for $PR_URL"
+            else
+              echo "::error::Could not enable auto-merge for $PR_URL"
+              exit 1
+            fi
+          fi

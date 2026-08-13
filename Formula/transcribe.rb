@@ -1,7 +1,6 @@
 class Transcribe < Formula
   desc "Video/audio transcription with auto-watch, OpenAI summaries, Slack alerts"
   homepage "https://github.com/calebsargeant/transcribe"
-  version "1.0.8"
   license "MIT"
 
   depends_on "ffmpeg"
