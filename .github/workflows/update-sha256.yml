@@ -36,11 +36,32 @@ jobs:
 
       - name: Update checksums
         id: update
+        env:
+          # Passed through the environment, never interpolated into the script
+          # body: a `${{ }}` expression is substituted before bash parses this,
+          # so a crafted input would otherwise run as shell source.
+          FORMULA_INPUT: ${{ github.event.inputs.formula }}
+          VERSION_INPUT: ${{ github.event.inputs.version }}
         run: |
           set -e
           updated=""
-          formula_input="${{ github.event.inputs.formula }}"
-          version_input="${{ github.event.inputs.version }}"
+          formula_input="$FORMULA_INPUT"
+          version_input="$VERSION_INPUT"
+
+          # The formula name becomes a path under Formula/, so keep it a bare
+          # name — no slashes, no leading dot, nothing that can walk out.
+          if [ -n "$formula_input" ] && \
+             [[ ! "$formula_input" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]*$ ]]; then
+            echo "::error::Invalid formula name: $formula_input"
+            exit 1
+          fi
+
+          # Written verbatim into the formula's `version "..."` field.
+          if [ -n "$version_input" ] && \
+             [[ ! "$version_input" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]*$ ]]; then
+            echo "::error::Invalid version: $version_input"
+            exit 1
+          fi
 
           # Build candidate list
           if [ -n "$formula_input" ]; then
@@ -62,7 +83,12 @@ jobs:
 
               echo "Updating checksums in $formula..."
 
-              ruby <<'RUBY' "$formula" "$formula_name" "$version_input"
+              # `ruby -` reads the program from stdin; without the `-` ruby runs
+              # the first argument as the script (i.e. the formula itself). The
+              # RUBY end token must land at column 0 in the generated script, so
+              # it sits at this block scalar's base indent — `<<` won't accept an
+              # indented end token and `<<-` strips only tabs.
+              ruby - "$formula" "$formula_name" "$version_input" <<'RUBY'
               require 'open3'
               require 'shellwords'
 
@@ -106,7 +132,7 @@ jobs:
               end
 
               File.write(path, contents)
-              RUBY
+          RUBY
 
               if git diff --quiet "$formula"; then
                 echo "No changes needed for $formula_name"
@@ -147,6 +173,8 @@ jobs:
             checksums
 
       - name: Summary
+        env:
+          UPDATED: ${{ steps.update.outputs.updated }}
         run: |
           echo "Checksum update completed"
-          echo "Updated formulas: ${{ steps.update.outputs.updated }}"
+          echo "Updated formulas: $UPDATED"
