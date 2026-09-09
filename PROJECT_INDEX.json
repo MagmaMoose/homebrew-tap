@@ -1,0 +1,101 @@
+{
+  "schema_version": "1",
+  "generated": "2026-09-09",
+  "repo": "MagmaMoose/homebrew-tap",
+  "description": "Centralised Homebrew tap for MagmaMoose CLI tools with automated formula updates and CI.",
+  "maintainers": [
+    { "name": "Caleb Sargeant", "github": "CalebSargeant" }
+  ],
+  "formulas": [
+    {
+      "name": "chargate",
+      "file": "Formula/chargate.rb",
+      "version": "2.11.1",
+      "description": "Net-new security and lint gate with a global git-hooks installer",
+      "homepage": "https://github.com/MagmaMoose/chargate",
+      "install_style": "python_virtualenv",
+      "depends_on": ["pre-commit", "python@3.12"]
+    },
+    {
+      "name": "maniforge",
+      "file": "Formula/maniforge.rb",
+      "version": { "macos": "1.2.0", "linux": "1.1.1" },
+      "description": "Terraform-like tool for managing Kubernetes applications",
+      "homepage": "https://github.com/calebsargeant/maniforge",
+      "install_style": "prebuilt_binary",
+      "platforms": ["macos-arm64", "macos-x86_64", "linux-arm64", "linux-x86_64"]
+    },
+    {
+      "name": "transcribe",
+      "file": "Formula/transcribe.rb",
+      "version": "1.0.8",
+      "description": "Video/audio transcription with auto-watch, OpenAI summarization, and Slack notifications",
+      "homepage": "https://github.com/calebsargeant/transcribe",
+      "install_style": "prebuilt_binary",
+      "depends_on": ["ffmpeg", "whisper-cpp"],
+      "platforms": ["macos-arm64", "macos-x86_64", "linux-arm64", "linux-x86_64"]
+    }
+  ],
+  "workflows": [
+    {
+      "file": ".github/workflows/security.yml",
+      "name": "Security",
+      "purpose": "Net-new security gating via Chargate marketplace action on PRs",
+      "action": "magmamoose/chargate",
+      "action_version": "v2.11.45",
+      "triggers": ["pull_request"]
+    },
+    {
+      "file": ".github/workflows/quality.yml",
+      "name": "Quality",
+      "purpose": "Patch-coverage gating via Brimyr marketplace action on PRs",
+      "action": "magmamoose/brimyr",
+      "action_version": "v1.9.5",
+      "triggers": ["pull_request"]
+    },
+    {
+      "file": ".github/workflows/ci.yml",
+      "name": "CI",
+      "purpose": "brew audit, brew style, brew test across macOS runners",
+      "triggers": ["pull_request", "push"],
+      "platforms": ["macos-13", "macos-14"]
+    },
+    {
+      "file": ".github/workflows/auto-update.yml",
+      "name": "Auto-Update",
+      "purpose": "Daily brew livecheck + bump-formula-pr to keep formulas current",
+      "triggers": ["schedule (02:00 UTC)", "workflow_dispatch"]
+    },
+    {
+      "file": ".github/workflows/update-sha256.yml",
+      "name": "Update SHA256",
+      "purpose": "Manual checksum refresh for one or all formulas",
+      "triggers": ["workflow_dispatch"]
+    },
+    {
+      "file": ".github/workflows/auto-merge.yml",
+      "name": "Auto-Merge",
+      "purpose": "Enables GitHub native auto-merge for bump/auto-update/Dependabot PRs",
+      "triggers": ["pull_request"]
+    },
+    {
+      "file": ".github/workflows/release.yml",
+      "name": "Release",
+      "purpose": "Diatreme release workflow — GitHub Releases on merge to main",
+      "triggers": ["pull_request", "push to main"]
+    },
+    {
+      "file": ".github/workflows/semantic-release.yaml",
+      "name": "Semantic Release",
+      "purpose": "Conventional Commits semantic versioning on push to main",
+      "triggers": ["push to main", "workflow_dispatch"]
+    }
+  ],
+  "key_files": {
+    "tap_metadata": "tap-metadata.json",
+    "formula_template": "Formula/tool.rb.example",
+    "architecture": "ARCHITECTURE.md",
+    "contributing": "CONTRIBUTING.md",
+    "quickref": "QUICKREF.md"
+  }
+}
