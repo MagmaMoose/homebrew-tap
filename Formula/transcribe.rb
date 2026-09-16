@@ -4,7 +4,7 @@ class Transcribe < Formula
   license "MIT"
 
   depends_on "ffmpeg"
-  depends_on "whisper-cpp"
+  depends_on "whisper.cpp"
 
   on_macos do
     if Hardware::CPU.arm?
