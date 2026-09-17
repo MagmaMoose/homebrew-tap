@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "generated": "2026-09-09",
+  "generated": "2026-09-16",
   "repo": "MagmaMoose/homebrew-tap",
   "description": "Centralised Homebrew tap for MagmaMoose CLI tools with automated formula updates and CI.",
   "maintainers": [
@@ -58,13 +58,13 @@
       "name": "CI",
       "purpose": "brew audit, brew style, brew test across macOS runners",
       "triggers": ["pull_request", "push"],
-      "platforms": ["macos-13", "macos-14"]
+      "platforms": ["macos-14", "macos-15"]
     },
     {
       "file": ".github/workflows/auto-update.yml",
       "name": "Auto-Update",
-      "purpose": "Daily brew livecheck + bump-formula-pr to keep formulas current",
-      "triggers": ["schedule (02:00 UTC)", "workflow_dispatch"]
+      "purpose": "Weekly brew livecheck + bump-formula-pr to keep formulas current (safety net; primary path is event-driven per-release bumps)",
+      "triggers": ["schedule (02:00 UTC Mondays)", "workflow_dispatch"]
     },
     {
       "file": ".github/workflows/update-sha256.yml",

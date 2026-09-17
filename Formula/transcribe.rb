@@ -1,30 +1,14 @@
 class Transcribe < Formula
   desc "Video/audio transcription with auto-watch, OpenAI summaries, Slack alerts"
-  homepage "https://github.com/calebsargeant/transcribe"
+  homepage "https://github.com/MagmaMoose/grimoire"
+  url "https://github.com/MagmaMoose/grimoire/releases/download/v1.3.12/transcribe-macos-arm64"
+  sha256 "a7811a160f5a3f59b9972da0369b0e0bd68e39b30c83f1e1922e2531d2d59815" # DevSkim: ignore DS173237
   license "MIT"
 
+  depends_on arch: :arm64
   depends_on "ffmpeg"
-  depends_on "whisper-cpp"
-
-  on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/calebsargeant/transcribe/releases/download/v1.0.8/transcribe-macos-arm64"
-      sha256 "bfa1183189f7ffcd26892b56004a5acfa0270e4222766a1de40f92854928b1d2"
-    else
-      url "https://github.com/calebsargeant/transcribe/releases/download/v1.0.8/transcribe-macos-x86_64"
-      sha256 "98f4d3564ffc04fe5a9c71c454a68f56312105b3a2d9c73b09dc5c99a7405eb4"
-    end
-  end
-
-  on_linux do
-    if Hardware::CPU.arm?
-      url "https://github.com/calebsargeant/transcribe/releases/download/v1.0.8/transcribe-linux-arm64"
-      sha256 "25dab7898429fed61a4fd88a57bff04a18b430b2cad515222e7fd7c7d3bc3fe2"
-    else
-      url "https://github.com/calebsargeant/transcribe/releases/download/v1.0.8/transcribe-linux-x86_64"
-      sha256 "0471dceda770cac2bfb6fada084023eca85f3fdff96c38a7ff11481d8db4130a"
-    end
-  end
+  depends_on :macos
+  depends_on "whisper.cpp"
 
   def install
     bin.install Dir["transcribe-*"].first => "transcribe"
