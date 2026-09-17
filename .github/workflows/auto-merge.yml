@@ -8,9 +8,14 @@ name: Auto-merge
 # Dependabot's action bumps.
 #
 # This does NOT bypass any gate. GitHub still holds the PR until every required
-# check on the default branch is green (`chargate`, `diatreme`, CodeQL, code
-# quality) and every review thread is resolved — it only removes the click. A bad
-# sha256 or a formula that fails `brew audit` still never reaches main.
+# check on the default branch is green and every review thread is resolved — it
+# only removes the click. No approval is required, so the checks ARE the gate:
+# `chargate` and `diatreme` come from the Caldrith-managed ruleset, while `Audit`,
+# `Style Check` and both `Test Formulas` jobs are required by this repo's own
+# `main` ruleset (hand-managed, not in MagmaMoose/admin), along with CodeQL and
+# code quality. That is why a bad sha256 or a formula that fails `brew audit`
+# never reaches main. Rename one of those CI jobs and update `main` with it, or
+# every PR blocks on a check that no longer reports.
 #
 # Deliberately uses `pull_request` (not `pull_request_target`) and never checks out
 # the PR's code — it only calls the API — so head-branch content is never executed.
