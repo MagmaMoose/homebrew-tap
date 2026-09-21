@@ -46,7 +46,7 @@ jobs:
       # version in which a repo with no detectable test suite passes instead of
       # exiting 2 (MagmaMoose/brimyr#54). Anything older turns this workflow into
       # a permanently red check on every repo that has nothing to test.
-      - uses: magmamoose/brimyr@feb52d60405fb6bb5993ff6f30e65a27e9e3261c # v1.10.0
+      - uses: magmamoose/brimyr@5fb49c26d5474490962ce9e9ed12dc4d245263f3 # v1.11.1
         with:
           # `threshold` is deliberately absent: 80 is the action's own default, and
           # naming it here would be a second place to keep in sync with the tool.
