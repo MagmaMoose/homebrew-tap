@@ -7,7 +7,9 @@ class Transcribe < Formula
 
   depends_on arch: :arm64
   depends_on "ffmpeg"
-  depends_on :macos
+  # Homebrew no longer bottles for macOS 14 (Tier 3), and whisper.cpp's dependency
+  # tree does not build from source there (z3, pulled in through llvm, fails).
+  depends_on macos: :sequoia
   depends_on "whisper.cpp"
 
   def install
