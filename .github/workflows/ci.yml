@@ -129,7 +129,7 @@ jobs:
               # `depends_on macos:` minimum, so there is nothing to test here.
               min_macos="$(brew info --json=v2 "magmamoose/tap/$formula_name" | jq -r \
                 '[.formulae[0].requirements[] | select(.name == "macos" and .version != null) | .version] | first // empty')"
-              if [ -n "$min_macos" ] && [ "$runner_macos" -lt "${min_macos%%.*}" ]; then
+              if [ -n "$min_macos" ] && [[ "$min_macos" =~ ^[0-9] ]] && [ "$runner_macos" -lt "${min_macos%%.*}" ]; then
                 echo "::notice::Skipping $formula_name: it needs macOS $min_macos or newer, this runner has macOS $runner_macos"
                 continue
               fi
