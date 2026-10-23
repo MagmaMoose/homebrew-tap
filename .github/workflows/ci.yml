@@ -115,6 +115,19 @@ jobs:
         run: |
           set -e
           runner_macos="$(sw_vers -productVersion | cut -d. -f1)"
+
+          # Homebrew stops building bottles for a macOS it no longer supports, so on
+          # that runner every dependency builds from source and fails for reasons that
+          # are not this tap's (macOS 14, 2026-10-23: Python failed to compile under
+          # the chargate formula). Ask Homebrew, which prints the same verdict as its
+          # "do not provide support for this old version" warning. If the check itself
+          # errors, the tests run as before. Once a leg says this, drop it from the
+          # matrix and from the `main` ruleset's required checks.
+          if brew ruby -e 'exit(MacOS.version.outdated_release? ? 0 : 1)'; then
+            echo "::notice::Skipping every formula: Homebrew no longer supports macOS $runner_macos (no bottles)."
+            exit 0
+          fi
+
           for formula in Formula/*.rb; do
             if [ -f "$formula" ]; then
               formula_name=$(basename "$formula" .rb)
