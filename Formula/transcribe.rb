@@ -1,13 +1,15 @@
 class Transcribe < Formula
   desc "Video/audio transcription with auto-watch, OpenAI summaries, Slack alerts"
   homepage "https://github.com/MagmaMoose/grimoire"
-  url "https://github.com/MagmaMoose/grimoire/releases/download/v1.3.16/transcribe-macos-arm64"
-  sha256 "2e741433e68f08185de2bff0864ce80ae78ae057c4b865edcdb1de000a48ab4f" # DevSkim: ignore DS173237
+  url "https://github.com/MagmaMoose/grimoire/releases/download/v1.3.23/transcribe-macos-arm64"
+  sha256 "34a483ec1fc8efc37327dd84da231b3cab20c36d03b0219f11069e28a2b0bf73" # DevSkim: ignore DS173237
   license "MIT"
 
   depends_on arch: :arm64
   depends_on "ffmpeg"
-  depends_on :macos
+  # Homebrew no longer bottles for macOS 14 (Tier 3), and whisper.cpp's dependency
+  # tree does not build from source there (z3, pulled in through llvm, fails).
+  depends_on macos: :sequoia
   depends_on "whisper.cpp"
 
   def install
