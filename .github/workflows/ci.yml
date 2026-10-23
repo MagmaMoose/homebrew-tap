@@ -21,7 +21,7 @@ jobs:
 
       - name: Set up Homebrew
         # yamllint disable-next-line rule:line-length
-        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6
+        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
 
       - name: Tap repository
         run: |
@@ -58,7 +58,7 @@ jobs:
 
       - name: Set up Homebrew
         # yamllint disable-next-line rule:line-length
-        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6
+        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
 
       - name: Check formula style
         run: |
@@ -102,7 +102,7 @@ jobs:
 
       - name: Set up Homebrew
         # yamllint disable-next-line rule:line-length
-        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6
+        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
 
       - name: Tap repository
         run: |
@@ -114,6 +114,7 @@ jobs:
       - name: Install and test formulas
         run: |
           set -e
+          runner_macos="$(sw_vers -productVersion | cut -d. -f1)"
           for formula in Formula/*.rb; do
             if [ -f "$formula" ]; then
               formula_name=$(basename "$formula" .rb)
@@ -121,6 +122,15 @@ jobs:
               # Skip example formula
               if [ "$formula_name" = "example-tool" ]; then
                 echo "Skipping example formula: $formula_name"
+                continue
+              fi
+
+              # brew refuses to install a formula on a macOS older than its
+              # `depends_on macos:` minimum, so there is nothing to test here.
+              min_macos="$(brew info --json=v2 "magmamoose/tap/$formula_name" | jq -r \
+                '[.formulae[0].requirements[] | select(.name == "macos" and .version != null) | .version] | first // empty')"
+              if [ -n "$min_macos" ] && [[ "$min_macos" =~ ^[0-9] ]] && [ "$runner_macos" -lt "${min_macos%%.*}" ]; then
+                echo "::notice::Skipping $formula_name: it needs macOS $min_macos or newer, this runner has macOS $runner_macos"
                 continue
               fi
 
