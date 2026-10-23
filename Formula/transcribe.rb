@@ -1,8 +1,8 @@
 class Transcribe < Formula
   desc "Video/audio transcription with auto-watch, OpenAI summaries, Slack alerts"
   homepage "https://github.com/MagmaMoose/grimoire"
-  url "https://github.com/MagmaMoose/grimoire/releases/download/v1.3.27/transcribe-macos-arm64"
-  sha256 "28689c4a026ba44e13923323b50b29a9fdb8094166f8c16394864e4bc3457206" # DevSkim: ignore DS173237
+  url "https://github.com/MagmaMoose/grimoire/releases/download/v1.3.28/transcribe-macos-arm64"
+  sha256 "e28116d230c007ec82fb3ecafaaaaf975f2f1ebc800eacd06a669525b92fa78c" # DevSkim: ignore DS173237
   license "MIT"
 
   depends_on arch: :arm64
