@@ -28,9 +28,9 @@ class AutoHeijn < Formula
 
   # macOS ties the Reminders grant to remindctl's path, so keep it outside the versioned keg.
   post_install_steps do
-    (var/"auto-heijn").mkpath
-    cp libexec/"remindctl", var/"auto-heijn/remindctl.new"
-    mv var/"auto-heijn/remindctl.new", var/"auto-heijn/remindctl" # a new inode, safe while one runs
+    mkdir_p "{{var}}/auto-heijn"
+    copy "{{libexec}}/remindctl", "{{var}}/auto-heijn/remindctl.new"
+    move "{{var}}/auto-heijn/remindctl.new", "{{var}}/auto-heijn/remindctl" # a new inode, safe while one runs
   end
 
   def caveats
