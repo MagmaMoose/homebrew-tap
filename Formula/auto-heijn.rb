@@ -4,6 +4,7 @@ class AutoHeijn < Formula
   url "https://github.com/CalebSargeant/auto-heijn/archive/refs/tags/v0.2.0.tar.gz"
   sha256 "2cdef4184b2eb66541468916d3edb0def0aee6f6c344f697f209d3d880145821" # DevSkim: ignore DS173237
   license "MIT"
+  revision 1
 
   livecheck do
     url :stable
@@ -22,7 +23,14 @@ class AutoHeijn < Formula
     resource("remindctl").stage { libexec.install "remindctl" }
     # Runs on /usr/bin/python3 so the macOS Reminders grant survives Homebrew Python upgrades.
     bin.install "auto_heijn.py" => "auto-heijn"
-    inreplace bin/"auto-heijn", "/opt/homebrew/bin/remindctl", opt_libexec/"remindctl"
+    inreplace bin/"auto-heijn", "/opt/homebrew/bin/remindctl", var/"auto-heijn/remindctl"
+  end
+
+  # macOS ties the Reminders grant to remindctl's path, so keep it outside the versioned keg.
+  post_install_steps do
+    mkdir_p "{{var}}/auto-heijn"
+    copy "{{libexec}}/remindctl", "{{var}}/auto-heijn/remindctl.new"
+    move "{{var}}/auto-heijn/remindctl.new", "{{var}}/auto-heijn/remindctl" # a new inode, safe while one runs
   end
 
   def caveats
