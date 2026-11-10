@@ -21,7 +21,7 @@ jobs:
 
       - name: Set up Homebrew
         # yamllint disable-next-line rule:line-length
-        uses: Homebrew/actions/setup-homebrew@c262868c096d909fc278daa87ed9772967331ea3 # 2026.11.02.1
+        uses: Homebrew/actions/setup-homebrew@63a2d4d8d4193eab3e62b1b782ff3ab8408f5b29 # 2026.11.09.1
 
       - name: Tap repository
         run: |
@@ -58,7 +58,7 @@ jobs:
 
       - name: Set up Homebrew
         # yamllint disable-next-line rule:line-length
-        uses: Homebrew/actions/setup-homebrew@c262868c096d909fc278daa87ed9772967331ea3 # 2026.11.02.1
+        uses: Homebrew/actions/setup-homebrew@63a2d4d8d4193eab3e62b1b782ff3ab8408f5b29 # 2026.11.09.1
 
       - name: Check formula style
         run: |
@@ -86,13 +86,23 @@ jobs:
           config: '.markdownlint.json'
         continue-on-error: true
 
+  # GitHub retired the macos-14 image; this only reports the check the main ruleset still requires.
+  test-macos-14:
+    name: Test Formulas (macos-14)
+    runs-on: ubuntu-latest
+    permissions: {}
+
+    steps:
+      - name: Report the retired leg
+        run: echo "::notice::GitHub retired the macos-14 runner image, so formulas are tested on macos-15 only."
+
   test:
     name: Test Formulas
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [macos-14, macos-15]
+        os: [macos-15]
       fail-fast: false
 
     steps:
@@ -102,7 +112,7 @@ jobs:
 
       - name: Set up Homebrew
         # yamllint disable-next-line rule:line-length
-        uses: Homebrew/actions/setup-homebrew@c262868c096d909fc278daa87ed9772967331ea3 # 2026.11.02.1
+        uses: Homebrew/actions/setup-homebrew@63a2d4d8d4193eab3e62b1b782ff3ab8408f5b29 # 2026.11.09.1
 
       - name: Tap repository
         run: |
