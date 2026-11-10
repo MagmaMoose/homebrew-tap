@@ -1,10 +1,9 @@
 class AutoHeijn < Formula
   desc "Sync an Apple Reminders shopping list to an Albert Heijn basket server"
   homepage "https://github.com/CalebSargeant/auto-heijn"
-  url "https://github.com/CalebSargeant/auto-heijn/archive/refs/tags/v0.2.0.tar.gz"
-  sha256 "2cdef4184b2eb66541468916d3edb0def0aee6f6c344f697f209d3d880145821" # DevSkim: ignore DS173237
+  url "https://github.com/CalebSargeant/auto-heijn/archive/refs/tags/v0.3.0.tar.gz"
+  sha256 "a447d036781a9761674f9d00d6e25f3c820d6a0f57549554a2f8e4fd24a1f1c6" # DevSkim: ignore DS173237
   license "MIT"
-  revision 1
 
   livecheck do
     url :stable
