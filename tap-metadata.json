@@ -15,6 +15,12 @@
     "url": "https://github.com/MagmaMoose/homebrew-tap.git"
   },
   "formulas": {
+    "auto-heijn": {
+      "description": "Turn an Apple Reminders shopping list into an Albert Heijn add-to-list link",
+      "homepage": "https://github.com/CalebSargeant/auto-heijn",
+      "version": "0.1.0",
+      "status": "active"
+    },
     "chargate": {
       "description": "Net-new security and lint gate with a global git-hooks installer",
       "homepage": "https://github.com/MagmaMoose/chargate",
