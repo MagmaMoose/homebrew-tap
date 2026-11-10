@@ -1,8 +1,8 @@
 class AutoHeijn < Formula
-  desc "Turn an Apple Reminders shopping list into an Albert Heijn add-to-list link"
+  desc "Sync an Apple Reminders shopping list to an Albert Heijn basket server"
   homepage "https://github.com/CalebSargeant/auto-heijn"
-  url "https://github.com/CalebSargeant/auto-heijn/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "d156f3ae765bd090b69f75134e257eb9222d0ea0e59ea6105e632fba56d5092a" # DevSkim: ignore DS173237
+  url "https://github.com/CalebSargeant/auto-heijn/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "2cdef4184b2eb66541468916d3edb0def0aee6f6c344f697f209d3d880145821" # DevSkim: ignore DS173237
   license "MIT"
 
   livecheck do
@@ -27,12 +27,14 @@ class AutoHeijn < Formula
 
   def caveats
     <<~EOS
+      Point it at your auto-heijn server in ~/.config/auto-heijn/config.json:
+        {"list": "Shopping List", "server": "https://ah.example.com"}
+      and keep the server's token in the Keychain:
+        security add-generic-password -U -s auto-heijn -a bridge-token -w
+
       Start it (every 5 minutes while you are logged in):
         brew services start auto-heijn
-      The first run asks macOS to let python3 use Reminders. Click Allow.
-
-      Settings (list name, AH product ids):
-        ~/.config/auto-heijn/config.json
+      The first run asks macOS to let remindctl use Reminders. Click Allow.
     EOS
   end
 
@@ -47,7 +49,7 @@ class AutoHeijn < Formula
   end
 
   test do
-    assert_match "Albert Heijn", shell_output("#{bin}/auto-heijn --help")
+    assert_match "Reminders", shell_output("#{bin}/auto-heijn --help")
     assert_match "0.3.9", shell_output("#{libexec}/remindctl --version")
   end
 end
