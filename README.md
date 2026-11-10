@@ -52,10 +52,10 @@ brew install <formula-name>
 
 | Tool | Description | Version | Install Command |
 |------|-------------|---------|-----------------|
-| transcribe | Video/audio transcription with auto-watch, OpenAI summarization, and Slack notifications | 1.0.8 | `brew install transcribe` |
-| maniforge | Terraform-like tool for managing Kubernetes applications | 1.2.0 | `brew install maniforge` |
-| chargate | Net-new security and lint gate with a global git-hooks installer | 2.0.0 | `brew install chargate` |
 | auto-heijn | Turn an Apple Reminders shopping list into an Albert Heijn add-to-list link | 0.1.0 | `brew install auto-heijn` |
+| chargate | Net-new security and lint gate with a global git-hooks installer | 2.0.0 | `brew install chargate` |
+| maniforge | Terraform-like tool for managing Kubernetes applications | 1.2.0 | `brew install maniforge` |
+| transcribe | Video/audio transcription with auto-watch, OpenAI summarization, and Slack notifications | 1.0.8 | `brew install transcribe` |
 
 ## Usage Examples
 
