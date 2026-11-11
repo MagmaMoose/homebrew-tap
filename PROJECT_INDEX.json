@@ -1,12 +1,23 @@
 {
   "schema_version": "1",
-  "generated": "2026-10-28",
+  "generated": "2026-11-11",
   "repo": "MagmaMoose/homebrew-tap",
   "description": "Centralised Homebrew tap for MagmaMoose CLI tools with automated formula updates and CI.",
   "maintainers": [
     { "name": "Caleb Sargeant", "github": "CalebSargeant" }
   ],
   "formulas": [
+    {
+      "name": "auto-heijn",
+      "file": "Formula/auto-heijn.rb",
+      "version": "0.3.0",
+      "description": "Sync an Apple Reminders shopping list to an Albert Heijn basket server",
+      "homepage": "https://github.com/CalebSargeant/auto-heijn",
+      "install_style": "python_script_with_bundled_binary",
+      "depends_on": ["macos: :sonoma"],
+      "platforms": ["macos-arm64", "macos-x86_64"],
+      "service": true
+    },
     {
       "name": "chargate",
       "file": "Formula/chargate.rb",
